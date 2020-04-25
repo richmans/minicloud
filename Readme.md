@@ -30,7 +30,7 @@ Then, i will build a custom management app where you can
 
 cloud_manifest.json describes the application and what it needs. This file should be in the root of the image/container
 
-Example cloud_manifest.json
+Example cloud_manifest.yml
 
 ```
 name: myapp
@@ -46,7 +46,7 @@ needs:
 To extract it we can:
 ```
 docker create <img>
-docker cp <container>:/cloud_manifest.json .
+docker cp <container>:/cloud_manifest.yml .
 ```
 
 The whole setup would include:
@@ -65,11 +65,14 @@ wget https://path.to/docker-compose.yml
 docker-compose up -d
 
 
-# Usefull things
+# Useful things
 
 python docker api:
 https://docker-py.readthedocs.io/en/stable/
 
 Github action to publish to docker hub:
 https://github.com/marketplace/actions/publish-docker
+-> Insight: this is not needed. Docker hub provides webhook integration with github. A push to github initiates a docker hub build and publish. Easy!
 
+# Server setup
+In digitalocean, choose the docker image from them marketplace. For size, i started with the smallest ($5) instance. Works great so far, haven't really tested the limits of how much this can host.
