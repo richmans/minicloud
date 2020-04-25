@@ -27,6 +27,14 @@ Then, i will build a custom management app where you can
 * connect custom domains to applications
 * backup databases and storage
 
+# Admin app architecture
+The admin app consists of 3 processes:
+* An nginx process acting as the main http/https webserver
+* A django app offering a GUI app to the admin. It stores info in the database and puts commands in the rabbitmq queue
+* A python runner app that executes commands:
+  * (re)deploy an app on docker with env vars from the db
+  * provision credentials for rabbitmq or mariadb
+  * render nginx configurationfiles based on the db and reload nginx
 
 cloud_manifest.json describes the application and what it needs. This file should be in the root of the image/container
 
@@ -45,8 +53,9 @@ needs:
 
 To extract it we can:
 ```
-docker create <img>
-docker cp <container>:/cloud_manifest.yml .
+export CONTAINER=`docker create richmans/minidemo`
+docker cp $CONTAINER:/cloud_manifest.yml .
+docker rm $CONTAINER
 ```
 
 The whole setup would include:
@@ -64,7 +73,6 @@ cd /cloud
 wget https://path.to/docker-compose.yml
 docker-compose up -d
 
-
 # Useful things
 
 python docker api:
@@ -74,5 +82,15 @@ Github action to publish to docker hub:
 https://github.com/marketplace/actions/publish-docker
 -> Insight: this is not needed. Docker hub provides webhook integration with github. A push to github initiates a docker hub build and publish. Easy!
 
+A small demo app to test deployments:
+https://hub.docker.com/repository/docker/richmans/minidemo
+
 # Server setup
 In digitalocean, choose the docker image from them marketplace. For size, i started with the smallest ($5) instance. Works great so far, haven't really tested the limits of how much this can host.
+
+```
+git clone https://github.com/richmans/minicloud
+cd minicloud
+./generate_env.sh
+docker-compose up -d
+```

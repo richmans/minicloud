@@ -1,0 +1,19 @@
+version: "3"
+services:
+  db:
+    image: mariadb:10.4
+    restart: always
+    env_file: env/maria.env.txt
+  mq:
+    image: rabbitmq:3.8-management
+    restart: always
+    env_file: env/rabbit.env.txt
+    ports:
+      - "8080:15672" # TODO: This should later go through nginx
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - 8081:80 # TODO: This should later go through nginx
+    links:
+      - "db"
