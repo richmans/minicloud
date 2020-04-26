@@ -36,7 +36,7 @@ The admin app consists of 3 processes:
   * provision credentials for rabbitmq or mariadb
   * render nginx configurationfiles based on the db and reload nginx
 
-cloud_manifest.json describes the application and what it needs. This file should be in the root of the image/container
+cloud_manifest.yml describes the application and what it needs. Docker seems to solve part of this problem, for it describes an EXPOSE command for defining open ports, but it doesn't seem to have a way of describing what services a container depends on. I also could not think of a way to mis-use standard docker features to this. So, i decided to define cloud_manifest.yml
 
 Example cloud_manifest.yml
 
@@ -84,6 +84,12 @@ https://github.com/marketplace/actions/publish-docker
 
 A small demo app to test deployments:
 https://hub.docker.com/repository/docker/richmans/minidemo
+
+Python lib to generate nginx config
+https://github.com/peakwinter/python-nginx
+
+Heroku app json
+https://devcenter.heroku.com/articles/app-json-schema#addons
 
 # Server setup
 In digitalocean, choose the docker image from them marketplace. For size, i started with the smallest ($5) instance. Works great so far, haven't really tested the limits of how much this can host.

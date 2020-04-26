@@ -1,4 +1,4 @@
-version: "3"
+version: "3.2"
 services:
   db:
     image: mariadb:10.4
@@ -17,3 +17,20 @@ services:
       - 8081:80 # TODO: This should later go through nginx
     links:
       - "db"
+  nginx:
+    image: nginx:1.17
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - nginxconfig:/etc/nginx
+  admin:
+    build: .
+    volumes:
+      - nginxconfig:/data/nginxconfig
+      - /var/run/docker.sock:/var/run/docker.sock
+    env_file: env/admin.env.txt
+    ports:
+     - 8082:5000 # TODO: this should go through nginx
+volumes:
+  nginxconfig:
